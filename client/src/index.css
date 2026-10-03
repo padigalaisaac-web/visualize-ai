@@ -6,37 +6,49 @@
   }
   
   body {
-    background-color: #090a0f;
-    color: #f3f4f6;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #0c0d11;
+    color: #e4e4e7;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     margin: 0;
     min-height: 100vh;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-/* Glassmorphism & Custom styling */
-.glass-panel {
-  background: rgba(17, 24, 39, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+/* Precision Technical Surfaces */
+.surface-card {
+  background-color: #12141a;
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.glass-panel-glow {
-  background: rgba(17, 24, 39, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(99, 102, 241, 0.25);
-  box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.15);
+.surface-card-subtle {
+  background-color: #0e1015;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* Custom animated gradient glow */
-@keyframes pulse-subtle {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+.surface-elevated {
+  background-color: #161820;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.animate-pulse-subtle {
-  animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.bg-zinc-850 {
+  background-color: #181b24;
+}
+
+.border-zinc-850 {
+  border-color: #202430;
+}
+
+.border-zinc-750 {
+  border-color: #2e3342;
+}
+
+/* Subtle grid texture for technical forensic tool */
+.bg-subtle-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
 }

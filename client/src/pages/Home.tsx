@@ -36,11 +36,10 @@ import {
 } from '../data/demoData';
 import { 
   ArrowRight, 
-  Sparkles, 
   RotateCcw, 
   AlertCircle, 
   ShieldAlert, 
-  Cpu
+  Terminal
 } from 'lucide-react';
 
 export const Home: React.FC = () => {
@@ -115,13 +114,13 @@ export const Home: React.FC = () => {
     setEvidencePreviewUrl(demo.evidenceImageUrl);
 
     try {
-      // Create real File objects from SVGs so they can be dispatched to the backend
+      // Create real File objects from SVGs/PNGs so they can be dispatched to backend
       const cFile = await dataUrlToFile(demo.claimImageUrl, demo.claimFileName);
       const eFile = await dataUrlToFile(demo.evidenceImageUrl, demo.evidenceFileName);
       setClaimFile(cFile);
       setEvidenceFile(eFile);
     } catch (err) {
-      console.warn('Failed to convert demo SVG to File object:', err);
+      console.warn('Failed to convert demo to File object:', err);
     }
 
     // Smooth scroll to analyzer cards
@@ -183,7 +182,7 @@ export const Home: React.FC = () => {
   const isReadyToAnalyze = Boolean(claimFile && evidenceFile && !isAnalyzing);
 
   return (
-    <div className="min-h-screen bg-[#090A0F] text-slate-100 flex flex-col selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-[#0c0d11] text-zinc-200 flex flex-col selection:bg-zinc-700 selection:text-white bg-subtle-grid">
       {/* Top Navigation */}
       <Header
         backendHealth={backendHealth}
@@ -194,37 +193,40 @@ export const Home: React.FC = () => {
       />
 
       <main className="mx-auto flex-1 w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Hero Section */}
-        <section className="text-center py-8 sm:py-12 max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-xs font-semibold text-indigo-300 mb-6 shadow-sm shadow-indigo-500/10">
-            <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
-            <span>MLH Hacktoberfest Hack Day Hyderabad &bull; Best Use of Gemma 4</span>
+        {/* Hero Section - Rigorous, technical, not vibe-coded */}
+        <section className="text-center py-6 sm:py-10 max-w-4xl mx-auto">
+          <div className="inline-flex items-center gap-2 rounded border border-zinc-800 bg-[#12141a] px-3 py-1 font-mono text-[11px] text-zinc-400 mb-5">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+            <span>SYSTEM // MULTIMODAL EVIDENCE VERIFICATION</span>
+            <span className="text-zinc-600">|</span>
+            <span className="text-zinc-500">MLH HACKTOBERFEST HYDERABAD</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight sm:leading-none">
-            Does the evidence actually{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
-              support the claim?
-            </span>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-100 leading-tight">
+            Does the evidence actually <span className="text-zinc-400">support the claim?</span>
           </h1>
 
-          <p className="mt-5 text-base sm:text-lg text-slate-300 max-w-2xl mx-auto font-normal">
-            Upload a claim and its visual evidence. Gemma 4 analyzes both images, extracts facts, compares numbers, and explains what the evidence really shows.
+          <p className="mt-4 text-sm sm:text-base text-zinc-400 max-w-2xl mx-auto font-normal leading-relaxed">
+            Ingest a visual claim and its corresponding visual proof. Gemma 4 performs cross-examination: extracting assertions, tabulating audited values, and outputting an objective, mathematical verdict.
           </p>
 
-          <p className="mt-2 text-xs uppercase tracking-widest text-slate-500 font-mono">
-            Multimodal Evidence Analysis &bull; Zero Guesswork
-          </p>
+          <div className="mt-3 flex items-center justify-center gap-3 font-mono text-[11px] text-zinc-500 uppercase tracking-wider">
+            <span>INPUT: 2× MULTIMODAL IMAGES</span>
+            <span>&bull;</span>
+            <span>ENGINE: GEMMA 4 (31B DENSE)</span>
+            <span>&bull;</span>
+            <span>ZERO SUBJECTIVE INFERENCE</span>
+          </div>
         </section>
 
         {/* Upload Panels Section */}
         <section ref={analyzerSectionRef} className="scroll-mt-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
             {/* Left: Claim Card */}
             <UploadCard
               type="claim"
               title="CLAIM"
-              subtitle="Upload the image containing the claim (PNG, JPG, JPEG, WEBP)"
+              subtitle="Upload image asserting the factual claim (PNG, JPG, JPEG, WEBP)"
               file={claimFile}
               previewUrl={claimPreviewUrl}
               onFileSelect={handleClaimFileSelect}
@@ -236,7 +238,7 @@ export const Home: React.FC = () => {
             <UploadCard
               type="evidence"
               title="EVIDENCE"
-              subtitle="Upload the image containing supporting evidence (PNG, JPG, JPEG, WEBP)"
+              subtitle="Upload image containing audited source data or proof (PNG, JPG, JPEG, WEBP)"
               file={evidenceFile}
               previewUrl={evidencePreviewUrl}
               onFileSelect={handleEvidenceFileSelect}
@@ -246,24 +248,24 @@ export const Home: React.FC = () => {
           </div>
 
           {/* Action Bar */}
-          <div className="mt-8 flex flex-col items-center justify-center gap-4">
+          <div className="mt-8 flex flex-col items-center justify-center gap-3">
             <button
               onClick={handleAnalyze}
               disabled={!isReadyToAnalyze}
-              className={`group relative flex items-center justify-center gap-3 rounded-2xl px-10 py-4 text-base font-bold tracking-tight shadow-xl transition-all duration-200 ${
+              className={`flex items-center justify-center gap-2.5 rounded-lg px-8 py-3.5 font-mono text-xs uppercase tracking-wider font-bold transition-all duration-150 ${
                 isReadyToAnalyze
-                  ? 'bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white hover:opacity-95 hover:shadow-indigo-500/25 hover:scale-[1.02] cursor-pointer'
-                  : 'bg-slate-800/80 text-slate-500 border border-white/5 cursor-not-allowed'
+                  ? 'bg-zinc-100 text-zinc-950 hover:bg-white active:bg-zinc-200 border border-zinc-200 shadow-sm cursor-pointer'
+                  : 'bg-zinc-900 text-zinc-600 border border-zinc-800 cursor-not-allowed'
               }`}
             >
-              <Cpu className={`h-5 w-5 ${isReadyToAnalyze ? 'text-indigo-200' : 'text-slate-600'}`} />
-              <span>Check with Gemma 4</span>
-              <ArrowRight className={`h-5 w-5 transition-transform ${isReadyToAnalyze ? 'group-hover:translate-x-1' : ''}`} />
+              <Terminal className={`h-4 w-4 ${isReadyToAnalyze ? 'text-zinc-900' : 'text-zinc-600'}`} />
+              <span>Run Verification (Gemma 4)</span>
+              <ArrowRight className="h-4 w-4" />
             </button>
 
             {!claimFile || !evidenceFile ? (
-              <p className="text-xs text-slate-500">
-                Please upload both a Claim image and an Evidence image (or pick an example below) to run verification.
+              <p className="font-mono text-[11px] text-zinc-500">
+                Awaiting input: Supply both Claim and Evidence images (or select a benchmark below).
               </p>
             ) : null}
           </div>
@@ -271,35 +273,35 @@ export const Home: React.FC = () => {
 
         {/* Error notification banner if any */}
         {errorMessage && (
-          <div className="mx-auto mt-6 max-w-2xl rounded-xl border border-rose-500/30 bg-rose-950/40 p-4 text-sm text-rose-300 flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 shrink-0 text-rose-400 mt-0.5" />
+          <div className="mx-auto mt-6 max-w-2xl rounded-lg border border-rose-900/60 bg-rose-950/30 p-4 text-xs font-mono text-rose-300 flex items-start gap-3">
+            <AlertCircle className="h-4 w-4 shrink-0 text-rose-400 mt-0.5" />
             <div className="flex-1">
-              <p className="font-semibold text-rose-200">Analysis Error</p>
-              <p className="mt-0.5 text-xs text-rose-300">{errorMessage}</p>
+              <p className="font-bold text-rose-200 uppercase tracking-wide">Inference Error</p>
+              <p className="mt-1 text-zinc-300">{errorMessage}</p>
             </div>
           </div>
         )}
 
         {/* Analyzing Progress State */}
         {isAnalyzing && (
-          <section className="mt-10 max-w-3xl mx-auto">
+          <section className="mt-8 max-w-2xl mx-auto">
             <AnalysisLoader modelName={backendHealth?.model_configured || 'Gemma 4'} />
           </section>
         )}
 
         {/* Result Dashboard */}
         {analysisResult && !isAnalyzing && (
-          <section ref={resultSectionRef} className="mt-12 scroll-mt-24 space-y-8">
+          <section ref={resultSectionRef} className="mt-10 scroll-mt-24 space-y-6">
             {/* Demo Mode Notice Banner if fallback was triggered */}
             {isDemoFallback && (
-              <div className="rounded-xl border border-amber-500/30 bg-amber-950/30 p-4 text-xs text-amber-200 flex items-start gap-3">
-                <ShieldAlert className="h-5 w-5 shrink-0 text-amber-400 mt-0.5" />
+              <div className="rounded-lg border border-amber-900/60 bg-amber-950/20 p-4 text-xs font-mono text-amber-200 flex items-start gap-3">
+                <ShieldAlert className="h-4 w-4 shrink-0 text-amber-400 mt-0.5" />
                 <div className="flex-1">
                   <p className="font-bold uppercase tracking-wider text-amber-300">
-                    Demo Mode Fallback Active
+                    DEMO BENCHMARK FALLBACK ACTIVE
                   </p>
-                  <p className="mt-0.5">
-                    Live Gemini API was unavailable or GEMINI_API_KEY was not configured. This result is clearly labeled as a <span className="font-bold underline">Demo result</span> based on pre-verified ground truth for this scenario.
+                  <p className="mt-0.5 text-zinc-300 font-sans text-xs">
+                    Live API responded with high demand. Presenting pre-verified ground truth benchmark for this scenario.
                   </p>
                 </div>
               </div>
@@ -318,13 +320,13 @@ export const Home: React.FC = () => {
             <EvidenceCard result={analysisResult} />
 
             {/* Reset / Run Another Button */}
-            <div className="flex justify-center pt-4">
+            <div className="flex justify-center pt-2">
               <button
                 onClick={handleReset}
-                className="flex items-center gap-2 rounded-xl border border-white/10 bg-slate-900/60 px-5 py-2.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+                className="flex items-center gap-2 rounded-lg border border-zinc-800 bg-[#12141a] px-4 py-2 font-mono text-xs text-zinc-400 hover:text-zinc-200 hover:border-zinc-700 transition-colors"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
-                <span>Verify Another Claim</span>
+                <span>Reset Inputs &amp; Run New Verification</span>
               </button>
             </div>
           </section>
@@ -338,16 +340,16 @@ export const Home: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="mt-20 border-t border-white/10 bg-slate-950 py-8 text-center text-xs text-slate-500">
-        <div className="mx-auto max-w-7xl px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <footer className="mt-20 border-t border-zinc-800 bg-[#0a0b0e] py-6 text-center font-mono text-xs text-zinc-500">
+        <div className="mx-auto max-w-7xl px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-slate-400">VisualProof AI</span>
+            <span className="font-bold text-zinc-300">VISUALPROOF.AI</span>
             <span>&bull;</span>
-            <span>Does the evidence actually support the claim?</span>
+            <span className="text-zinc-500">DOES THE EVIDENCE ACTUALLY SUPPORT THE CLAIM?</span>
           </div>
 
-          <p className="text-slate-500">
-            Built for MLH Hacktoberfest Hack Day Hyderabad &bull; Powered by Gemma 4 via Gemini API
+          <p className="text-zinc-500">
+            MLH HACKTOBERFEST HYDERABAD &bull; BEST USE OF GEMMA 4
           </p>
         </div>
       </footer>

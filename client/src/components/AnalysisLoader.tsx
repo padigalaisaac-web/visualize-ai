@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Eye, CheckCircle2, Loader2, Sparkles, Cpu } from 'lucide-react';
+import { Check, Loader2, Terminal } from 'lucide-react';
 
 interface AnalysisLoaderProps {
   modelName?: string;
 }
 
 const STEPS = [
-  { id: 1, label: 'Reading claim', description: 'Extracting factual claim statement and visual context from Image 1' },
-  { id: 2, label: 'Understanding evidence', description: 'Parsing visual data, tables, charts, and metrics from Image 2' },
-  { id: 3, label: 'Comparing information', description: 'Cross-referencing claim assertions against audited evidence' },
-  { id: 4, label: 'Checking consistency', description: 'Verifying mathematical bounds, percentages, and factual consistency' },
-  { id: 5, label: 'Generating verdict', description: 'Synthesizing objective verdict and structured explanation' },
+  { id: '01', label: 'INGESTING CLAIM IMAGE', description: 'Extracting factual assertions, context, and claimed values' },
+  { id: '02', label: 'PARSING EVIDENCE DATA', description: 'Extracting audited figures, tables, and visible proof from Image 2' },
+  { id: '03', label: 'CROSS-REFERENCING ASSERTIONS', description: 'Evaluating claimed metrics against observed evidentiary points' },
+  { id: '04', label: 'COMPUTING MATHEMATICAL BOUNDS', description: 'Verifying percentages, arithmetic differences, and margins' },
+  { id: '05', label: 'SYNTHESIZING AUDIT VERDICT', description: 'Generating structured schema with justification and confidence' },
 ];
 
 export const AnalysisLoader: React.FC<AnalysisLoaderProps> = ({ modelName = 'Gemma 4' }) => {
@@ -18,7 +18,7 @@ export const AnalysisLoader: React.FC<AnalysisLoaderProps> = ({ modelName = 'Gem
 
   useEffect(() => {
     // Step progression timed to match typical multimodal model inference
-    const intervals = [700, 1100, 1200, 1000]; // ms per step transition
+    const intervals = [700, 1100, 1200, 1000];
     let step = 0;
 
     const timer = setInterval(() => {
@@ -34,33 +34,29 @@ export const AnalysisLoader: React.FC<AnalysisLoaderProps> = ({ modelName = 'Gem
   }, []);
 
   return (
-    <div className="w-full rounded-2xl border border-indigo-500/30 bg-slate-900/80 p-8 shadow-2xl backdrop-blur-xl">
+    <div className="w-full rounded-xl border border-zinc-800 bg-[#12141a] p-6 sm:p-7 shadow-sm">
       {/* Top Banner */}
-      <div className="flex flex-col items-center text-center mb-8">
-        <div className="relative mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/10 border border-indigo-500/30">
-          <Eye className="h-8 w-8 text-indigo-400 animate-pulse" />
-          <div className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-purple-500">
-            <Sparkles className="h-3 w-3 text-white animate-spin" />
-          </div>
+      <div className="flex flex-col items-center text-center mb-6">
+        <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg border border-zinc-800 bg-[#0c0d11] text-zinc-300">
+          <Terminal className="h-5 w-5" />
         </div>
 
-        <div className="flex items-center gap-2 mb-1">
-          <span className="inline-flex items-center gap-1 rounded-full bg-indigo-500/10 px-2.5 py-0.5 text-xs font-semibold text-indigo-300 border border-indigo-500/20">
-            <Cpu className="h-3.5 w-3.5" />
-            {modelName} Multimodal Engine
+        <div className="flex items-center gap-2 mb-1.5 font-mono text-xs">
+          <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span className="font-semibold text-zinc-300 uppercase tracking-wide">
+            INSPECTION IN PROGRESS
           </span>
+          <span className="text-zinc-600">|</span>
+          <span className="text-zinc-500 uppercase">{modelName}</span>
         </div>
 
-        <h3 className="text-xl font-bold text-white tracking-tight sm:text-2xl">
-          Analyzing Visual Evidence
-        </h3>
-        <p className="text-sm text-slate-400 max-w-md">
-          Gemma 4 is inspecting both visual inputs to determine if the facts objectively substantiate the claim.
+        <p className="font-mono text-xs text-zinc-500 max-w-md">
+          Executing dual-image multimodal inference and mathematical discrepancy checks.
         </p>
       </div>
 
       {/* Sequential Steps List */}
-      <div className="mx-auto max-w-lg space-y-3">
+      <div className="mx-auto max-w-lg space-y-2 font-mono">
         {STEPS.map((step, idx) => {
           const isCompleted = idx < currentStepIndex;
           const isCurrent = idx === currentStepIndex;
@@ -68,51 +64,45 @@ export const AnalysisLoader: React.FC<AnalysisLoaderProps> = ({ modelName = 'Gem
           return (
             <div
               key={step.id}
-              className={`flex items-start gap-4 rounded-xl border p-3.5 transition-all duration-300 ${
+              className={`flex items-start gap-3 rounded-lg border p-3 transition-colors ${
                 isCurrent
-                  ? 'border-indigo-500/50 bg-indigo-500/10 shadow-md shadow-indigo-500/10'
+                  ? 'border-zinc-700 bg-zinc-850/80 text-zinc-200'
                   : isCompleted
-                  ? 'border-emerald-500/20 bg-slate-950/40 text-slate-400'
-                  : 'border-white/5 bg-slate-950/20 text-slate-600'
+                  ? 'border-zinc-850 bg-[#0c0d11]/70 text-zinc-400'
+                  : 'border-zinc-900 bg-[#0c0d11]/30 text-zinc-650'
               }`}
             >
               <div className="mt-0.5 shrink-0">
                 {isCompleted ? (
-                  <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+                  <div className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-950 border border-emerald-800 text-emerald-400">
+                    <Check className="h-2.5 w-2.5" />
+                  </div>
                 ) : isCurrent ? (
-                  <Loader2 className="h-5 w-5 text-indigo-400 animate-spin" />
+                  <Loader2 className="h-4 w-4 text-zinc-300 animate-spin" />
                 ) : (
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full border border-slate-700 text-[11px] font-mono font-medium text-slate-500">
+                  <div className="flex h-4 w-4 items-center justify-center rounded border border-zinc-800 text-[10px] text-zinc-600">
                     {step.id}
                   </div>
                 )}
               </div>
 
-              <div className="flex-1">
-                <div className="flex items-center justify-between">
-                  <p
-                    className={`text-sm font-semibold ${
-                      isCurrent
-                        ? 'text-white'
-                        : isCompleted
-                        ? 'text-slate-300'
-                        : 'text-slate-500'
-                    }`}
-                  >
-                    {step.label}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-2">
+                  <p className={`text-xs font-semibold ${isCurrent ? 'text-white' : isCompleted ? 'text-zinc-300' : 'text-zinc-600'}`}>
+                    {step.id} // {step.label}
                   </p>
                   {isCurrent && (
-                    <span className="font-mono text-[10px] uppercase tracking-wider text-indigo-400 animate-pulse">
-                      In Progress...
+                    <span className="text-[10px] uppercase tracking-wider text-emerald-400">
+                      [RUNNING]
                     </span>
                   )}
                   {isCompleted && (
-                    <span className="font-mono text-[10px] uppercase tracking-wider text-emerald-400">
-                      Done
+                    <span className="text-[10px] uppercase tracking-wider text-zinc-500">
+                      [OK]
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-[11px] text-zinc-500 mt-0.5 font-sans">
                   {step.description}
                 </p>
               </div>
@@ -122,10 +112,10 @@ export const AnalysisLoader: React.FC<AnalysisLoaderProps> = ({ modelName = 'Gem
       </div>
 
       {/* Bottom Progress Bar */}
-      <div className="mx-auto mt-6 max-w-lg">
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
+      <div className="mx-auto mt-5 max-w-lg">
+        <div className="h-1 w-full overflow-hidden rounded bg-zinc-800">
           <div
-            className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400 transition-all duration-500 ease-out"
+            className="h-full bg-zinc-400 transition-all duration-300 ease-out"
             style={{ width: `${((currentStepIndex + 1) / STEPS.length) * 100}%` }}
           />
         </div>

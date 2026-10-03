@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Upload, X, RefreshCw, CheckCircle2, Image as ImageIcon } from 'lucide-react';
+import { Upload, X, RefreshCw, Check, FileImage } from 'lucide-react';
 
 interface UploadCardProps {
   type: 'claim' | 'evidence';
@@ -26,7 +26,7 @@ export const UploadCard: React.FC<UploadCardProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const isClaim = type === 'claim';
-  const badgeLabel = isClaim ? 'STEP 1: THE CLAIM' : 'STEP 2: THE EVIDENCE';
+  const badgeLabel = isClaim ? 'INPUT // 01: CLAIM' : 'INPUT // 02: EVIDENCE';
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -51,7 +51,7 @@ export const UploadCard: React.FC<UploadCardProps> = ({
       if (isValidImage(droppedFile)) {
         onFileSelect(droppedFile);
       } else {
-        alert('Unsupported file type. Please upload a PNG, JPG, JPEG, or WEBP image.');
+        alert('Unsupported file format. Please provide PNG, JPG, JPEG, or WEBP.');
       }
     }
   };
@@ -62,7 +62,7 @@ export const UploadCard: React.FC<UploadCardProps> = ({
       if (isValidImage(selectedFile)) {
         onFileSelect(selectedFile);
       } else {
-        alert('Unsupported file type. Please upload a PNG, JPG, JPEG, or WEBP image.');
+        alert('Unsupported file format. Please provide PNG, JPG, JPEG, or WEBP.');
       }
     }
   };
@@ -80,38 +80,34 @@ export const UploadCard: React.FC<UploadCardProps> = ({
 
   return (
     <div
-      className={`relative flex flex-col rounded-2xl border transition-all duration-200 ${
-        isClaim
-          ? 'border-indigo-500/20 bg-slate-900/60 shadow-lg shadow-indigo-950/20'
-          : 'border-cyan-500/20 bg-slate-900/60 shadow-lg shadow-cyan-950/20'
-      } ${isDragging ? 'ring-2 ring-indigo-400 border-indigo-400 bg-slate-800/80 scale-[1.01]' : ''}`}
+      className={`relative flex flex-col rounded-xl border transition-all duration-150 ${
+        isDragging
+          ? 'border-zinc-400 bg-zinc-900/90'
+          : 'border-zinc-800 bg-[#12141a]'
+      }`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
       {/* Top Header */}
-      <div className="flex items-center justify-between border-b border-white/5 px-5 py-4">
+      <div className="flex items-center justify-between border-b border-zinc-800/80 px-5 py-3.5">
         <div>
-          <span
-            className={`inline-block text-[11px] font-bold tracking-wider uppercase ${
-              isClaim ? 'text-indigo-400' : 'text-cyan-400'
-            }`}
-          >
+          <span className="font-mono text-[11px] font-semibold tracking-wider text-zinc-400 uppercase">
             {badgeLabel}
           </span>
-          <h3 className="text-lg font-bold text-white tracking-tight">{title}</h3>
-          <p className="text-xs text-slate-400">{subtitle}</p>
+          <h3 className="font-mono text-base font-bold text-zinc-100 tracking-tight">{title}</h3>
+          <p className="text-xs text-zinc-400 mt-0.5">{subtitle}</p>
         </div>
 
         {file && (
-          <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-400 border border-emerald-500/20">
-            <CheckCircle2 className="h-3.5 w-3.5" />
-            Loaded
+          <span className="flex items-center gap-1 rounded border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 font-mono text-[11px] font-medium text-emerald-400">
+            <Check className="h-3 w-3" />
+            STAGED
           </span>
         )}
       </div>
 
-      {/* Main Body: Upload Area or Preview */}
+      {/* Main Intake Area */}
       <div className="flex-1 p-5">
         <input
           ref={inputRef}
@@ -123,7 +119,7 @@ export const UploadCard: React.FC<UploadCardProps> = ({
         />
 
         {!file && !previewUrl ? (
-          /* Empty Upload State */
+          /* Empty Intake Zone */
           <div
             onClick={() => !disabled && inputRef.current?.click()}
             role="button"
@@ -134,53 +130,39 @@ export const UploadCard: React.FC<UploadCardProps> = ({
                 inputRef.current?.click();
               }
             }}
-            className={`group flex min-h-[260px] cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-6 text-center transition-all ${
-              isClaim
-                ? 'border-indigo-500/30 hover:border-indigo-400 hover:bg-indigo-500/5'
-                : 'border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-500/5'
-            }`}
+            className="group flex min-h-[250px] cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-zinc-700/80 bg-zinc-950/40 p-6 text-center transition-all hover:border-zinc-500 hover:bg-zinc-900/40"
           >
-            <div
-              className={`mb-4 flex h-14 w-14 items-center justify-center rounded-2xl transition-transform group-hover:scale-110 ${
-                isClaim
-                  ? 'bg-indigo-500/10 text-indigo-400 group-hover:bg-indigo-500/20'
-                  : 'bg-cyan-500/10 text-cyan-400 group-hover:bg-cyan-500/20'
-              }`}
-            >
-              <Upload className="h-7 w-7" />
+            <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-lg border border-zinc-800 bg-zinc-900 text-zinc-400 group-hover:text-zinc-200 transition-colors">
+              <Upload className="h-5 w-5" />
             </div>
 
-            <p className="mb-1 text-sm font-semibold text-slate-200 group-hover:text-white">
-              Drag & drop image here, or{' '}
-              <span className={isClaim ? 'text-indigo-400 underline' : 'text-cyan-400 underline'}>
-                browse
-              </span>
+            <p className="text-sm font-medium text-zinc-300 group-hover:text-white">
+              Drop image here, or <span className="text-zinc-100 underline underline-offset-2">select file</span>
             </p>
-            <p className="text-xs text-slate-400">
-              Supports PNG, JPG, JPEG, WEBP (Max 10MB)
+            <p className="font-mono text-xs text-zinc-500 mt-1">
+              PNG, JPG, JPEG, WEBP &bull; Max 10MB
             </p>
           </div>
         ) : (
-          /* Image Loaded State */
-          <div className="flex flex-col gap-4">
-            <div className="relative overflow-hidden rounded-xl border border-white/10 bg-slate-950 flex items-center justify-center min-h-[220px] max-h-[300px]">
+          /* Staged Image View */
+          <div className="flex flex-col gap-3">
+            <div className="relative overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950 flex items-center justify-center min-h-[220px] max-h-[280px]">
               <img
                 src={previewUrl || ''}
                 alt={`${title} Preview`}
-                className="max-h-[300px] w-full object-contain p-2"
+                className="max-h-[280px] w-full object-contain p-2"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
               
-              {/* Floating Action Buttons */}
-              <div className="absolute bottom-3 right-3 flex items-center gap-2">
+              {/* Overlay Actions */}
+              <div className="absolute bottom-2.5 right-2.5 flex items-center gap-1.5">
                 <button
                   type="button"
                   onClick={() => inputRef.current?.click()}
                   title="Replace image"
                   disabled={disabled}
-                  className="flex items-center gap-1 rounded-lg bg-slate-900/90 border border-white/20 px-3 py-1.5 text-xs font-medium text-slate-200 backdrop-blur-sm transition-colors hover:bg-slate-800 hover:text-white"
+                  className="flex items-center gap-1 rounded border border-zinc-700 bg-zinc-900/90 px-2.5 py-1 text-xs font-mono font-medium text-zinc-300 transition-colors hover:bg-zinc-800 hover:text-white"
                 >
-                  <RefreshCw className="h-3.5 w-3.5 text-indigo-400" />
+                  <RefreshCw className="h-3 w-3" />
                   Replace
                 </button>
                 <button
@@ -188,24 +170,24 @@ export const UploadCard: React.FC<UploadCardProps> = ({
                   onClick={onFileRemove}
                   title="Remove image"
                   disabled={disabled}
-                  className="flex items-center gap-1 rounded-lg bg-rose-950/80 border border-rose-500/30 px-3 py-1.5 text-xs font-medium text-rose-300 backdrop-blur-sm transition-colors hover:bg-rose-900 hover:text-white"
+                  className="flex items-center gap-1 rounded border border-zinc-700 bg-zinc-900/90 px-2.5 py-1 text-xs font-mono font-medium text-zinc-300 transition-colors hover:bg-zinc-800 hover:text-red-400"
                 >
-                  <X className="h-3.5 w-3.5" />
-                  Remove
+                  <X className="h-3 w-3" />
+                  Clear
                 </button>
               </div>
             </div>
 
-            {/* File Metadata Info */}
-            <div className="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 px-3.5 py-2 text-xs text-slate-400">
+            {/* File Telemetry Bar */}
+            <div className="flex items-center justify-between rounded border border-zinc-800/80 bg-zinc-950/60 px-3 py-1.5 font-mono text-xs text-zinc-400">
               <div className="flex items-center gap-2 truncate pr-2">
-                <ImageIcon className="h-4 w-4 shrink-0 text-slate-400" />
-                <span className="truncate font-mono text-slate-300">
-                  {file?.name || 'pre-seeded_demo_image.svg'}
+                <FileImage className="h-3.5 w-3.5 shrink-0 text-zinc-500" />
+                <span className="truncate text-zinc-300">
+                  {file?.name || 'demo_artifact.png'}
                 </span>
               </div>
-              <span className="shrink-0 font-mono text-slate-500">
-                {file ? formatFileSize(file.size) : 'Demo Asset'}
+              <span className="shrink-0 text-zinc-500">
+                {file ? formatFileSize(file.size) : 'Cached'}
               </span>
             </div>
           </div>
