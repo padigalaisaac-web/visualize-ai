@@ -9,7 +9,7 @@
     "build:server": "cd server && npm run build",
     "build:client": "cd client && npm run build",
     "build": "cd client && npm run build && cd ../server && npm run build",
-    "render-build": "cd server && npm install && npm run build && cd ../client && npm install && npm run build",
+    "render-build": "cd server && npm install --include=dev && npm run build && cd ../client && npm install --include=dev && npm run build",
     "start": "node server/dist/index.js"
   },
   "keywords": [

@@ -21,7 +21,7 @@ app.use(express.json());
 app.use('/api', analyzeRouter);
 
 // Health & configuration check
-app.get('/api/health', (_req, res) => {
+app.get('/api/health', (_req: express.Request, res: express.Response) => {
   const model = process.env.GEMINI_MODEL || 'gemma-4-31b-it';
   const hasKey = Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim() !== '' && process.env.GEMINI_API_KEY !== 'your_gemini_api_key_here');
 
@@ -47,7 +47,7 @@ if (clientDistPath) {
   console.log(`📦 Serving static client build from: ${clientDistPath}`);
   app.use(express.static(clientDistPath));
 
-  app.get('*', (req, res, next) => {
+  app.get('*', (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (req.path.startsWith('/api')) {
       return next();
     }
@@ -55,7 +55,7 @@ if (clientDistPath) {
   });
 } else {
   // Root informational endpoint in API-only mode
-  app.get('/', (_req, res) => {
+  app.get('/', (_req: express.Request, res: express.Response) => {
     res.json({
       name: 'VisualProof AI API',
       tagline: 'Does the evidence actually support the claim?',
