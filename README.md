@@ -210,6 +210,19 @@ Visit **`http://localhost:5173`** (or the port shown by Vite) in your browser.
 
 ---
 
+## Deploy to Render (1-Click Blueprint)
+
+VisualProof AI is production-ready for deployment on **Render** as a single unified full-stack service:
+
+1. Push your code or connect repo: `https://github.com/padigalaisaac-web/visualize-ai`
+2. In Render, select **New +** > **Blueprint** (uses [`render.yaml`](./render.yaml)).
+3. Supply your `GEMINI_API_KEY` when prompted.
+4. Render automatically runs `npm run render-build` and `npm start` to serve both frontend and backend on your live domain!
+
+See the full guide in [**`RENDER_DEPLOYMENT.md`**](./RENDER_DEPLOYMENT.md).
+
+---
+
 ## Interactive Demo Examples
 
 VisualProof AI includes **3 pre-seeded real-world demonstration scenarios** with generated visual artifacts:

@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { analyzeRouter } from './routes/analyze.js';
 
@@ -33,17 +34,38 @@ app.get('/api/health', (_req, res) => {
   });
 });
 
-// Root informational endpoint
-app.get('/', (_req, res) => {
-  res.json({
-    name: 'VisualProof AI API',
-    tagline: 'Does the evidence actually support the claim?',
-    endpoints: {
-      health: 'GET /api/health',
-      analyze: 'POST /api/analyze (multipart/form-data: claimImage, evidenceImage)'
+// Check if frontend build exists to serve full-stack SPA on Render/production
+const clientDistCandidates = [
+  path.resolve(__dirname, '../../client/dist'),
+  path.resolve(process.cwd(), 'client/dist'),
+  path.resolve(process.cwd(), '../client/dist'),
+];
+
+const clientDistPath = clientDistCandidates.find(candidate => fs.existsSync(candidate));
+
+if (clientDistPath) {
+  console.log(`📦 Serving static client build from: ${clientDistPath}`);
+  app.use(express.static(clientDistPath));
+
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) {
+      return next();
     }
+    res.sendFile(path.join(clientDistPath, 'index.html'));
   });
-});
+} else {
+  // Root informational endpoint in API-only mode
+  app.get('/', (_req, res) => {
+    res.json({
+      name: 'VisualProof AI API',
+      tagline: 'Does the evidence actually support the claim?',
+      endpoints: {
+        health: 'GET /api/health',
+        analyze: 'POST /api/analyze (multipart/form-data: claimImage, evidenceImage)'
+      }
+    });
+  });
+}
 
 // Global error handler
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
@@ -60,12 +82,13 @@ app.listen(PORT, () => {
   const hasKey = Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim() !== '' && process.env.GEMINI_API_KEY !== 'your_gemini_api_key_here');
 
   console.log(`\n==================================================`);
-  console.log(`   👁️  VISUALPROOF AI — BACKEND SERVER`);
+  console.log(`   👁️  VISUALPROOF AI — PRODUCTION SERVER`);
   console.log(`   "Does the evidence actually support the claim?"`);
   console.log(`==================================================`);
   console.log(`🚀 Server listening on http://localhost:${PORT}`);
   console.log(`🤖 Configured Model (GEMINI_MODEL): ${model}`);
   console.log(`🔑 Gemini API Key detected: ${hasKey ? 'YES (Active)' : 'NO (Demo Mode fallback ready)'}`);
+  console.log(`📦 SPA Static Serving: ${clientDistPath ? 'ENABLED (' + clientDistPath + ')' : 'DISABLED'}`);
   console.log(`📡 Endpoints: POST http://localhost:${PORT}/api/analyze`);
   console.log(`==================================================\n`);
 });

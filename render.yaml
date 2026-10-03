@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: visualproof-ai
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm run render-build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GEMINI_MODEL
+        value: gemma-4-31b-it
+      - key: GEMINI_API_KEY
+        sync: false

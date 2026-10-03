@@ -4,13 +4,13 @@
   "private": true,
   "description": "VisualProof AI - Multimodal evidence verification powered by Gemma 4",
   "scripts": {
-    "install:all": "cd server && npm install && cd ../client && npm install",
     "dev:server": "cd server && npm run dev",
     "dev:client": "cd client && npm run dev",
     "build:server": "cd server && npm run build",
     "build:client": "cd client && npm run build",
-    "build": "npm run build:server && npm run build:client",
-    "start": "cd server && npm start"
+    "build": "cd client && npm run build && cd ../server && npm run build",
+    "render-build": "cd server && npm install && npm run build && cd ../client && npm install && npm run build",
+    "start": "node server/dist/index.js"
   },
   "keywords": [
     "gemma-4",
@@ -18,7 +18,8 @@
     "multimodal",
     "evidence-checking",
     "hacktoberfest",
-    "mlh"
+    "mlh",
+    "render"
   ],
   "author": "VisualProof AI Team",
   "license": "Apache-2.0"
